@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 import android.widget.VideoView;
 
 import com.dagf.presentlogolib.R;
@@ -44,6 +45,12 @@ public class PresentActivity extends AppCompatActivity {
             FinishPresent();
         }
     });
+
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if(getSupportActionBar() != null)
+        getSupportActionBar().hide();
 
     videoView.start();
     }
