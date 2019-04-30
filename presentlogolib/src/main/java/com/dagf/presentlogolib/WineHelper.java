@@ -16,6 +16,8 @@ public class WineHelper {
      typeVideo:
      0 => Default Neon
      1 => luminoso
+     2 => Explosivo
+     3 => Luces veloces
      **/
     public static void openPresentation(Context cc, int typeVideo){
         if(typeVideo >= 0 && typeVideo <= 3)

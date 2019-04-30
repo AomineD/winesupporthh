@@ -68,6 +68,10 @@ public class PresentActivity extends AppCompatActivity {
                 return R.raw.splash;
             case 1:
                 return R.raw.splash_2;
+            case 2:
+                return R.raw.splash_3;
+            case 3:
+                return R.raw.splash_4;
                 default:
                     return R.raw.splash;
         }
