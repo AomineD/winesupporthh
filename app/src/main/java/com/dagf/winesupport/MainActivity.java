@@ -33,20 +33,11 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        String urr = "http://www.mediafire.com/file/9sucjp894lieou3/T_P_Lt_T1c2-1";
 
 
-        WineHelper.getMediafireFile(this, urr, new MediafireParser.MediafireResponse() {
-            @Override
-            public void Loaded(String url_complete) {
-                Log.e("MAIN", "Loaded: "+url_complete);
-            }
 
-            @Override
-            public void Failed(String errno) {
-                Log.e("MAIN", "Failed: "+errno);
-            }
-        });
+
+       // Log.e("MAIN", "NUEVO URL => "+MediafireParser.generateMediaf(urr));
 
 
 
