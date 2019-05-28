@@ -15,7 +15,7 @@ public class MediafireParser {
 
 
     public static String generateMediaf(String fhash){
-        return "http://www.mediafire.com/file"+fhash+".mkv/file";
+        return fhash.replace("alien-media", "http://www.mediafire.com/file")+".mkv/file";
     }
 
     public MediafireParser(Context m, String urr, final MediafireResponse listener){
