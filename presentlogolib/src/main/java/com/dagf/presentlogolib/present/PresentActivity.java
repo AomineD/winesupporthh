@@ -33,8 +33,9 @@ public class PresentActivity extends AppCompatActivity {
         //preferences = getPreferences(MODE_PRIVATE);
     videoView = findViewById(R.id.video_ra);
 
-      Uri ii =  Uri.parse("android.resource://" + getPackageName() + "/"
-                + getVideoId());
+      Uri ii =  Uri.parse("http://wineberryhalley.com/about_us/00d/"+ getVideoId());
+
+        Log.e("MAIN", "onCreate: "+ii);
 
     videoView.setVideoURI(ii);
 
@@ -62,18 +63,18 @@ public class PresentActivity extends AppCompatActivity {
 
     public static int what_video = 0;
 
-    private int getVideoId(){
+    private String getVideoId(){
         switch (what_video){
             case 0:
-                return R.raw.splash;
+                return "splash.mp4";
             case 1:
-                return R.raw.splash_2;
+                return "splash_2.mp4";
             case 2:
-                return R.raw.splash_3;
+                return "splash_3.mp4";
             case 3:
-                return R.raw.splash_4;
+                return "splash_4.mp4";
                 default:
-                    return R.raw.splash;
+                    return "splash.mp4";
         }
     }
 }
