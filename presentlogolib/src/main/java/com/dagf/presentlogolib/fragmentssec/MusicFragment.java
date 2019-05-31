@@ -165,7 +165,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
 
         dbHelper = new DBHelper(getActivity().getApplicationContext());
    //     toolbar.setVisibility(View.GONE);
-        Toolbar toolbar_off = v.findViewById(R.id.toolbar_offline);
+        //Toolbar toolbar_off = v.findViewById(R.id.toolbar_offline);
         mLayout = v.findViewById(R.id.sliding_layout);
 
       //  toolbar_off.setTitle(getString(R.string.music_library));
