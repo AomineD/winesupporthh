@@ -72,6 +72,8 @@ public class SongByOFFPlaylistActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_song_by_offline_playlist);
+
         dbHelper = MusicFragment.dbHelper;
         FrameLayout contentFrameLayout = findViewById(R.id.content_frame);
         getLayoutInflater().inflate(R.layout.activity_song_by_offline_playlist, contentFrameLayout);

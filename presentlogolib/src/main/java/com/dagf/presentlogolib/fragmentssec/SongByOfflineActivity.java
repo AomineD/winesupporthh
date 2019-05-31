@@ -11,10 +11,12 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,7 +43,7 @@ import java.util.ArrayList;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
-public class SongByOfflineActivity extends Activity {
+public class SongByOfflineActivity extends AppCompatActivity {
 
     Methods methods;
     RecyclerView rv;
@@ -60,6 +62,15 @@ public class SongByOfflineActivity extends Activity {
         setContentView(R.layout.activity_song_by_cat);
 
        // drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+
+
+      Toolbar toolbar = this.findViewById(R.id.toolbar_select);
+      toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+       // setActionBar(toolbar);
 
 
         dbHelper = MusicFragment.dbHelper;

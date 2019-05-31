@@ -26,6 +26,7 @@ import android.widget.TextView;
 import com.dagf.presentlogolib.R;
 import com.dagf.presentlogolib.models.ItemAlbums;
 import com.dagf.presentlogolib.utils.Constant;
+import com.dagf.presentlogolib.utils.InterAdListener;
 import com.dagf.presentlogolib.utils.Methods;
 import com.dagf.presentlogolib.utils.RecyclerItemClickListener;
 import com.dagf.presentlogolib.utils.adapters.AdapterAlbums;
@@ -54,7 +55,16 @@ public class FragmentOFAlbums extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_albums, container, false);
 
-        methods = new Methods(getActivity());
+        methods = new Methods(getActivity(), new InterAdListener() {
+            @Override
+            public void onClick(int position, String type) {
+                Intent intent = new Intent(getActivity(), SongByOfflineActivity.class);
+                intent.putExtra("type", getString(R.string.artist));
+                intent.putExtra("id", adapterAlbums.getItem(position).getId());
+                intent.putExtra("name", adapterAlbums.getItem(position).getName());
+                startActivity(intent);
+            }
+        });
         errr_msg = getString(R.string.err_no_albums_found);
 
         progressBar = rootView.findViewById(R.id.pb_albums);
@@ -69,7 +79,7 @@ public class FragmentOFAlbums extends Fragment {
         rv.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-            //    methods.showInterAd(position, "");
+                methods.showInterAd(position, " ");
             }
         }));
 

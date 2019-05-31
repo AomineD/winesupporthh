@@ -7,9 +7,21 @@
     android:background="@color/bg"
     android:gravity="center">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_select"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:title="@string/add_songs"
+        android:visibility="gone"
+        android:paddingEnd="10dp"/>
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_song_by_cat"
         android:layout_width="match_parent"
+        android:layout_below="@id/toolbar_select"
         tools:listitem="@layout/layout_offline_songs"
         android:layout_height="match_parent"
         android:visibility="visible" />
@@ -35,11 +47,5 @@
         app:cpb_rotation_speed="1.0"
         app:cpb_stroke_width="4dp"
         app:cpb_sweep_speed="1.0" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars" />
 
 </RelativeLayout>
