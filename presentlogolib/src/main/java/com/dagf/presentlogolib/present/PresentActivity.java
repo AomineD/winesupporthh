@@ -21,6 +21,8 @@ public class PresentActivity extends AppCompatActivity {
         return preferences.getInt(k_f, 0) == 1;
     }
 
+    public static final int keycode_permission = 494;
+
     private static SharedPreferences preferences;
     public static final String k_f = "JSDASDJASDSD";
 
@@ -35,7 +37,7 @@ public class PresentActivity extends AppCompatActivity {
 
       Uri ii =  Uri.parse("http://wineberryhalley.com/about_us/00d/"+ getVideoId());
 
-        Log.e("MAIN", "onCreate: "+ii);
+     //   Log.e("MAIN", "onCreate: "+ii);
 
     videoView.setVideoURI(ii);
 

@@ -7,38 +7,55 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.StatFs;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.dagf.presentlogolib.fragmentssec.PlayerService;
 import com.dagf.presentlogolib.present.PresentActivity;
 import com.dagf.presentlogolib.utils.MediafireParser;
-import com.dagf.presentlogolib.utils.ZipDecryptInputStream;
 import com.squareup.picasso.Picasso;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipInputStream;
-
-import ir.mahdi.mzip.zip.ZipArchive;
 
 public class WineHelper {
 
     public static final  String urltest = "http://www.mediafire.com/file/909q425vqvf888c/Game2.10%255BFabianLeyva%255D";
+
+
+
+    public static final int keypermission = 394;
+
+    public static void setPlayerServiceS(Activity bs, int mipmapicon){
+
+        PlayerService.ConfigureT(bs, mipmapicon);
+    }
+
+    public static boolean checkPermissionWrite(Activity as){
+        return ActivityCompat.checkSelfPermission(as, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static void requestPermissionWrite(Activity a){
+        if(ActivityCompat.checkSelfPermission(a, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+
+        }else{
+            ActivityCompat.requestPermissions(a, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, keypermission);
+        }
+    }
 
     /**
      typeVideo:
@@ -80,15 +97,28 @@ public class WineHelper {
     /** ========================= AQUI EMPIEZA LO CHIDO ================================= **/
 
 
+
+
 public static File saln (String namepath) throws IOException {
 
-    if(!namepath.endsWith(".aln")){
+    if(!namepath.endsWith(".aln/file")){
         return null;
     }
 
-    File fs = new File(namepath);
 
-    File ff = changeExtension(fs, ".mp4");
+    File f = null;
+
+    try {
+            InputStream in = new URL(namepath).openStream();
+
+             f = File.createTempFile("_AUDIO_", ".mp4");
+            FileOutputStream out = new FileOutputStream(f);
+            IOUtils.copy(in, out);
+            // play f
+
+    } catch (IOException e) {
+        Log.e("MAIN", "saln: "+e.getMessage());
+    }
 
 
    // Log.e("MAIN", "saln: FILE PATH => "+ff.getAbsolutePath());
@@ -96,7 +126,7 @@ public static File saln (String namepath) throws IOException {
     //ZipArchive.unzip(ff.getAbsolutePath(),ff.getParent(),"00dwinpass");
 
 
-    return ff;
+    return f;
 
 }
 

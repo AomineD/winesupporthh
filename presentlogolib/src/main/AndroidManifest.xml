@@ -2,10 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dagf.presentlogolib">
 
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application>
         <activity android:name=".present.PresentActivity"></activity>
+
+
+        <service
+            android:name="com.dagf.presentlogolib.fragmentssec.PlayerService"
+            android:exported="false" />
+
+
+        <activity
+            android:name="com.dagf.presentlogolib.fragmentssec.SelectSongActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+
+        <activity
+            android:name="com.dagf.presentlogolib.fragmentssec.SongByOfflineActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="com.dagf.presentlogolib.fragmentssec.SongByOFFPlaylistActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="com.dagf.presentlogolib.fragmentssec.Add2OfflinePlaylistActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
     </application>
 
 </manifest>
