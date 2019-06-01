@@ -205,6 +205,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
+                    Log.e(TAG, "getItem:  RETORNANDO PRIMERA "+position);
                     return FragmentOFSongs.newInstance(position);
                 case 1:
                     return FragmentOFPlaylist.newInstance(position);

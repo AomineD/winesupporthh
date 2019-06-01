@@ -1,7 +1,10 @@
 package com.dagf.winesupport;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dagf.presentlogolib.WineHelper;
+import com.dagf.presentlogolib.eq.EqualizerFragment;
 import com.dagf.presentlogolib.fragmentssec.MusicFragment;
 import com.dagf.presentlogolib.fragmentssec.PlayerService;
 import com.dagf.presentlogolib.utils.MediafireParser;
@@ -42,13 +46,27 @@ public class MainActivity extends AppCompatActivity {
 
         WineHelper.setPlayerServiceS(this, R.mipmap.home);
 
+        MediaPlayer mediaPlayer = new MediaPlayer();
+
+        int aja = mediaPlayer.getAudioSessionId();
+
+        EqualizerFragment.audiosessionid = aja;
+        EqualizerFragment.themeColor = getResources().getColor(R.color.colorPrimary);
+
+        EqualizerFragment.setupAudioSession(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "BACK", Toast.LENGTH_SHORT).show();
+            }
+        }, mediaPlayer);
+
         if(WineHelper.shouldPresent(this))
       //  WineHelper.openPresentation(this, 1);
 
 
 
 if(WineHelper.checkPermissionWrite(this))
-        getSupportFragmentManager().beginTransaction().add(R.id.frm, new MusicFragment()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().add(R.id.frm, new EqualizerFragment()).commitAllowingStateLoss();
 else
     WineHelper.requestPermissionWrite(this);
 

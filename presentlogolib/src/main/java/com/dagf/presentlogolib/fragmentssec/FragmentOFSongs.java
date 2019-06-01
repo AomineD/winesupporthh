@@ -81,6 +81,8 @@ public class FragmentOFSongs extends Fragment {
         rv.setItemAnimator(new DefaultItemAnimator());
         rv.setHasFixedSize(true);
 
+        Log.e(TAG, "onCreateView: SI SI SI ENTRO EN OF SONGS");
+
         new LoadOfflineSongs().execute();
 
         setHasOptionsMenu(true);
@@ -155,7 +157,7 @@ public class FragmentOFSongs extends Fragment {
             }
         }, "");
 
-        Log.e(TAG, "setAdapter: "+Constant.arrayListOfflineSongs.size());
+        Log.e(TAG, "setAdapter: "+Constant.arrayListOfflineSongs.size() + " es visible "+(rv.getVisibility() == View.VISIBLE));
         rv.setAdapter(adapter);
         setEmpty();
     }
