@@ -93,6 +93,10 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
     public static SlidingUpPanelLayout mLayout;
     public static DBHelper dbHelper;
 
+    public static int getAudioSessionID(){
+        return PlayerService.vrgachamo;
+    }
+
     public void setDrawableb(int drawableb) {
         Drawableb = drawableb;
     }
@@ -173,6 +177,8 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_back);*/
 
+        Log.e(TAG, "Oncreate: LLEGO A ONCREATE(VIEW) , dbhelper es => "+(dbHelper!=null));
+
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         mViewPager = v.findViewById(R.id.container);
@@ -203,6 +209,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
 
         @Override
         public Fragment getItem(int position) {
+            Log.e(TAG, "getItem: si entro en adapter => "+position);
             switch (position) {
                 case 0:
                     Log.e(TAG, "getItem:  RETORNANDO PRIMERA "+position);
@@ -214,7 +221,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
                 case 3:
                     return FragmentOFAlbums.newInstance(position);
                 default:
-                    return FragmentOFAlbums.newInstance(position);
+                    return FragmentOFSongs.newInstance(position);
             }
         }
 
@@ -1142,7 +1149,7 @@ vj = v;
 
     @Override
     public void onDestroy() {
-        Constant.isAppOpen = false;
+        //Constant.isAppOpen = false;
         super.onDestroy();
     }
 
@@ -1168,8 +1175,8 @@ vj = v;
 
     @Override
     public void onPause() {
-        seekHandler.removeCallbacks(run);
-
+       // seekHandler.removeCallbacks(run);
+Log.e("MAIN", "PAUSEE");
         super.onPause();
     }
 

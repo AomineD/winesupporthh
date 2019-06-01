@@ -45,6 +45,7 @@ import com.db.chart.view.ChartView;
 import com.db.chart.view.LineChartView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.gson.Gson;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -94,13 +95,12 @@ public class EqualizerFragment extends Fragment {
     
     private static BassBoost bassBoost;
     private static PresetReverb presetReverb;
-    private static MediaPlayer mMediaPlayer;
+   // private static MediaPlayer mMediaPlayer;
 
-    public static void setupAudioSession(View.OnClickListener cs, MediaPlayer mediaPlayer){
+    public static void setupAudioSession(View.OnClickListener cs, int mediaPlayer){
         clickListener = cs;
 
-        audiosessionid = mediaPlayer.getAudioSessionId();
-        mMediaPlayer = mediaPlayer;
+        audiosessionid = mediaPlayer;
         try {
             bassBoost = new BassBoost(0, audiosessionid);
             bassBoost.setEnabled(false);
@@ -108,12 +108,12 @@ public class EqualizerFragment extends Fragment {
             BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
             bassBoostSetting.strength = (1000 / 19);
             bassBoost.setProperties(bassBoostSetting);
-            mMediaPlayer.setAuxEffectSendLevel(1.0f);
+      //      mMediaPlayer.setAuxEffectSendLevel(1.0f);
 
             presetReverb = new PresetReverb(0, audiosessionid);
             presetReverb.setPreset(PresetReverb.PRESET_NONE);
             presetReverb.setEnabled(false);
-            mMediaPlayer.setAuxEffectSendLevel(1.0f);
+    //        mMediaPlayer.setAuxEffectSendLevel(1.0f);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -157,7 +157,7 @@ public class EqualizerFragment extends Fragment {
                             presetReverb.setEnabled(true);
                             presetReverb.setPreset(reverbPreset);
                         }
-                        mMediaPlayer.setAuxEffectSendLevel(1.0f);
+                     //   mMediaPlayer.setAuxEffectSendLevel(1.0f);
                         if (eqFrag != null)
                             eqFrag.setBlockerVisibility(View.GONE);
                     } catch (Exception e) {
@@ -248,7 +248,9 @@ public class EqualizerFragment extends Fragment {
         equalizerBlocker = (FrameLayout) view.findViewById(R.id.equalizerBlocker);
 
 
+        if(bassStrength != 0)
         bassBoost.setStrength(bassStrength);
+        if(reverbPreset != 0)
         presetReverb.setPreset(reverbPreset);
 
         if (equalizerModel.isEqualizerEnabled) {
