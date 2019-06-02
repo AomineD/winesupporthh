@@ -50,12 +50,15 @@ public class FragmentOFSongs extends Fragment {
 
     public static FragmentOFSongs newInstance(int sectionNumber) {
         FragmentOFSongs fragment = new FragmentOFSongs();
+    //    Log.e(TAG, "newInstance: INSTANCIANDO FRAGMENT OF SONGS");
         return fragment;
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_song_by_cat, container, false);
+
+    //    Log.e(TAG, "onCreateView: ONCREATE VIEW SONGS");
 
         methods = new Methods(getActivity(), new InterAdListener() {
             @Override
@@ -157,7 +160,7 @@ public class FragmentOFSongs extends Fragment {
             }
         }, "");
 
-        Log.e(TAG, "setAdapter: "+Constant.arrayListOfflineSongs.size() + " es visible "+(rv.getVisibility() == View.VISIBLE));
+
         rv.setAdapter(adapter);
         setEmpty();
     }
@@ -182,6 +185,8 @@ public class FragmentOFSongs extends Fragment {
 
             frameLayout.addView(myView);
         }
+
+        Log.e(TAG, "setAdapter: "+Constant.arrayListOfflineSongs.size() + " es visible "+(rv.getVisibility() == View.VISIBLE));
     }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)

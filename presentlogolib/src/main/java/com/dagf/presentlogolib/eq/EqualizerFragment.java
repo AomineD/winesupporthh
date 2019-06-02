@@ -247,10 +247,11 @@ public class EqualizerFragment extends Fragment {
 
         equalizerBlocker = (FrameLayout) view.findViewById(R.id.equalizerBlocker);
 
+        Log.e(TAG, "onViewCreated: "+bassStrength);
 
-        if(bassStrength != 0)
+        if(bassStrength != -1)
         bassBoost.setStrength(bassStrength);
-        if(reverbPreset != 0)
+        if(reverbPreset != -1)
         presetReverb.setPreset(reverbPreset);
 
         if (equalizerModel.isEqualizerEnabled) {

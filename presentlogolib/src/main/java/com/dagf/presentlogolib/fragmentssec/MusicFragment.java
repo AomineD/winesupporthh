@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
@@ -24,6 +25,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -179,7 +181,9 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
 
         Log.e(TAG, "Oncreate: LLEGO A ONCREATE(VIEW) , dbhelper es => "+(dbHelper!=null));
 
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+
+        Log.e(TAG, "Oncreate: LLEGO MAS ABAJO DE ADAPTER");
 
         mViewPager = v.findViewById(R.id.container);
         mViewPager.setOffscreenPageLimit(5);
@@ -199,12 +203,26 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
+        Log.e(TAG, "initTabs: "+(mSectionsPagerAdapter != null) +" <= NO ES NULL, SIZE => "+(mViewPager.getVisibility() == View.VISIBLE));
+
+        mViewPager.setCurrentItem(1);
     }
 
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+
+        @Override
+        public void restoreState(Parcelable state, ClassLoader loader) {
+            try {
+                super.restoreState(state, loader);
+            }catch (Exception e){
+                Log.e(TAG, "restoreState: "+e.getMessage());
+            }
+        }
 
         SectionsPagerAdapter(FragmentManager fm) {
+
             super(fm);
+          //  Log.e(TAG, "SectionsPagerAdapter: lol");
         }
 
         @Override
@@ -224,6 +242,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
                     return FragmentOFSongs.newInstance(position);
             }
         }
+
 
         @Override
         public int getCount() {
@@ -1176,7 +1195,7 @@ vj = v;
     @Override
     public void onPause() {
        // seekHandler.removeCallbacks(run);
-Log.e("MAIN", "PAUSEE");
+Log.e("MAIN", " ======================================PAUSEE========================================");
         super.onPause();
     }
 
