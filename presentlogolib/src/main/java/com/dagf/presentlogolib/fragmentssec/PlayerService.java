@@ -23,11 +23,13 @@ import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Surface;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.dagf.presentlogolib.R;
+import com.dagf.presentlogolib.eq.EqualizerFragment;
 import com.dagf.presentlogolib.models.ItemAlbums;
 import com.dagf.presentlogolib.models.MessageEvent;
 import com.dagf.presentlogolib.utils.Constant;
@@ -67,6 +69,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Random;
+
+import static com.dagf.presentlogolib.utils.DBHelper.TAG;
 
 public class PlayerService extends IntentService implements Player.EventListener {
 
@@ -285,6 +289,9 @@ public class PlayerService extends IntentService implements Player.EventListener
             @Override
             public void onAudioSessionId(EventTime eventTime, int audioSessionId) {
 vrgachamo = audioSessionId;
+                Log.e(TAG, "onAudioSessionId: changed "+audioSessionId);
+                EqualizerFragment.setupAudioSession(vrgachamo);
+                EqualizerFragment.actEq(getApplicationContext());
             }
 
             @Override

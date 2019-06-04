@@ -48,19 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
         WineHelper.setPlayerServiceS(this, R.mipmap.home);
 
-        MediaPlayer mediaPlayer = new MediaPlayer();
-
-        int aja = mediaPlayer.getAudioSessionId();
-
-        EqualizerFragment.audiosessionid = aja;
         EqualizerFragment.themeColor = getResources().getColor(R.color.colorPrimary);
 
-        EqualizerFragment.setupAudioSession(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "BACK", Toast.LENGTH_SHORT).show();
-            }
-        }, 3);
 
 
         final TabLayout tablay = findViewById(R.id.tablay);
@@ -72,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
 
         tablay.addTab(tablay.newTab().setIcon(R.drawable.alien).setText("Equalizador"));
         WineHelper.setPlayerServiceS(this, R.mipmap.ic_launcher);
-        mediaPlayer = new MediaPlayer();
       final MusicFragment  frMusic = new MusicFragment();
 
         tablay.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
@@ -94,12 +82,13 @@ public class MainActivity extends AppCompatActivity {
 
                     case 2:
 
-                        EqualizerFragment.setupAudioSession(new View.OnClickListener() {
+                        EqualizerFragment.setListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 tablay.getTabAt(1).select();
                             }
-                        }, MusicFragment.getAudioSessionID());
+                        });
+                        EqualizerFragment.setupAudioSession(MusicFragment.getAudioSessionID());
 
                         EqualizerFragment.themeColor = getResources().getColor(R.color.colorPrimaryDark);
 

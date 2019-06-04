@@ -60,6 +60,7 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.dagf.presentlogolib.R;
+import com.dagf.presentlogolib.eq.EqualizerFragment;
 import com.dagf.presentlogolib.models.ItemMyPlayList;
 import com.dagf.presentlogolib.models.ItemSong;
 import com.dagf.presentlogolib.models.MessageEvent;
@@ -151,6 +152,9 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
 
         Oncreate(v);
         Constant.isAppOpen = true;
+        EqualizerFragment.setupAudioSession(getAudioSessionID());
+
+        EqualizerFragment.actEq(getActivity());
 
         return v;
     }

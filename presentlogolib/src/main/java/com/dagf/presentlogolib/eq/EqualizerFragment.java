@@ -1,6 +1,7 @@
 package com.dagf.presentlogolib.eq;
 
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -51,6 +52,8 @@ import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.dagf.presentlogolib.utils.DBHelper.TAG;
 
@@ -97,12 +100,17 @@ public class EqualizerFragment extends Fragment {
     private static PresetReverb presetReverb;
    // private static MediaPlayer mMediaPlayer;
 
-    public static void setupAudioSession(View.OnClickListener cs, int mediaPlayer){
+    public static void setListener(View.OnClickListener cs ){
         clickListener = cs;
+    }
+
+    public static void setupAudioSession(int mediaPlayer){
+
 
         audiosessionid = mediaPlayer;
         try {
             bassBoost = new BassBoost(0, audiosessionid);
+            Log.e(TAG, "setupAudioSession: bassbost tiene id = "+audiosessionid);
             bassBoost.setEnabled(false);
             BassBoost.Settings bassBoostSettingTemp = bassBoost.getProperties();
             BassBoost.Settings bassBoostSetting = new BassBoost.Settings(bassBoostSettingTemp.toString());
@@ -115,6 +123,7 @@ public class EqualizerFragment extends Fragment {
             presetReverb.setEnabled(false);
     //        mMediaPlayer.setAuxEffectSendLevel(1.0f);
         } catch (Exception e) {
+            Log.e(TAG, "EXCEPTION SETTING: "+e.getMessage());
             e.printStackTrace();
         }
     }
@@ -129,6 +138,68 @@ public class EqualizerFragment extends Fragment {
 
     private static View.OnClickListener clickListener;
 
+    public static void actEq(Context prefe){
+     Equalizer mEqualizer = new Equalizer(0,audiosessionid);
+
+        if(preferences == null){
+            preferences = prefe.getSharedPreferences("", Context.MODE_PRIVATE);
+        }
+     getSavedData();
+     if(equalizerModel == null){
+         return;
+     }
+
+
+
+        equalizerModel.isEqualizerEnabled = equalizerModel.isEqualizerEnabled();
+     boolean  isEqualizerReloaded = true;
+        seekbarpos = equalizerModel.getSeekbarpos();
+       int presetPos = equalizerModel.getPresetPos();
+        reverbPreset = equalizerModel.getReverbPreset();
+        bassStrength = equalizerModel.getBassStrength();
+
+
+     boolean ifs = preferences.getInt(keyeqenabled, 0) == 1;
+
+        if (ifs) {
+            try {
+                //   equalizerModel.isEqualizerEnabled = true;
+                int pos = presetPos;
+                if (pos != 0) {
+                    mEqualizer.usePreset((short) (pos - 1));
+                } else {
+                    for (short i = 0; i < 5; i++) {
+                        mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                    }
+                }
+                if (bassStrength != -1 && reverbPreset != -1) {
+                    bassBoost.setEnabled(true);
+                    bassBoost.setStrength(bassStrength);
+                    presetReverb.setEnabled(true);
+                    presetReverb.setPreset(reverbPreset);
+                    Log.e(TAG, "actEq: "+bassStrength+" en bassbost");
+                }
+                Log.e(TAG, "actEq: "+bassStrength+"  "+reverbPreset);
+                //   mMediaPlayer.setAuxEffectSendLevel(1.0f);
+            } catch (Exception e) {
+                Log.e(TAG, "actEq: e1 "+e.getMessage());
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                //   equalizerModel.isEqualizerEnabled = false;
+                mEqualizer.usePreset((short) 0);
+                bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                presetReverb.setPreset((short) 0);
+                Log.e(TAG, "actEq: 0 en bassbost");
+            } catch (Exception e) {
+                Log.e(TAG, "actEq: e2 "+e.getMessage());
+                e.printStackTrace();
+            }
+        }
+
+        Log.e(TAG, "actEq: activated eq => "+ifs + " "+bassBoost.getId());
+    }
 
     void simk(boolean isChecked){
 
@@ -169,6 +240,8 @@ public class EqualizerFragment extends Fragment {
             }
         }
         equalizerModel.isEqualizerEnabled = isChecked;
+
+        preferences.edit().putInt(keyeqenabled, isChecked ? 1: 0).commit();
 
     }
 
@@ -234,7 +307,8 @@ public class EqualizerFragment extends Fragment {
 
         equalizerSwitch = (SwitchCompat) view.findViewById(R.id.equalizer_switch);
         equalizerSwitch.setChecked(equalizerModel.isEqualizerEnabled);
-            simk(equalizerSwitch.isChecked());
+
+
 
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -342,9 +416,12 @@ public class EqualizerFragment extends Fragment {
             public void onProgressChanged(int progress) {
                 bassStrength = (short) (((float) 1000 / 19) * (progress));
                 try {
+                    if(bassBoost.getId() != audiosessionid){
+                        bassBoost = new BassBoost(3, audiosessionid);
+                    }
                     bassBoost.setStrength(bassStrength);
                 equalizerModel.setBassStrength(bassStrength);
-                    Log.e(TAG, "onProgressChanged: "+bassStrength);
+                    Log.e(TAG, "onProgressChanged: "+bassStrength + " ID = "+bassBoost.getId());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -738,7 +815,7 @@ public class EqualizerFragment extends Fragment {
     /** ===================== GET SAVED DATA ==================================== **/
 
 
-    private void getSavedData() {
+    private static void getSavedData() {
         try {
             Gson gson = new Gson();
             Log.d("TIME", "start");
