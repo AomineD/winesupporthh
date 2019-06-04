@@ -179,7 +179,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.mipmap.ic_back);*/
 
-        Log.e(TAG, "Oncreate: LLEGO A ONCREATE(VIEW) , dbhelper es => "+(dbHelper!=null));
+        //Log.e(TAG, "Oncreate: LLEGO A ONCREATE(VIEW) , dbhelper es => "+(dbHelper!=null));
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
 
@@ -203,7 +203,7 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));
-        Log.e(TAG, "initTabs: "+(mSectionsPagerAdapter != null) +" <= NO ES NULL, SIZE => "+(mViewPager.getVisibility() == View.VISIBLE));
+    //    Log.e(TAG, "initTabs: "+(mSectionsPagerAdapter != null) +" <= NO ES NULL, SIZE => "+(mViewPager.getVisibility() == View.VISIBLE));
 
         mViewPager.setCurrentItem(1);
     }
@@ -227,10 +227,10 @@ public class MusicFragment extends Fragment implements View.OnClickListener{
 
         @Override
         public Fragment getItem(int position) {
-            Log.e(TAG, "getItem: si entro en adapter => "+position);
+        //    Log.e(TAG, "getItem: si entro en adapter => "+position);
             switch (position) {
                 case 0:
-                    Log.e(TAG, "getItem:  RETORNANDO PRIMERA "+position);
+                   // Log.e(TAG, "getItem:  RETORNANDO PRIMERA "+position);
                     return FragmentOFSongs.newInstance(position);
                 case 1:
                     return FragmentOFPlaylist.newInstance(position);

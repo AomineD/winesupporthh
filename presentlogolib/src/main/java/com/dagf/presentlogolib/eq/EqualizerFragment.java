@@ -130,6 +130,48 @@ public class EqualizerFragment extends Fragment {
     private static View.OnClickListener clickListener;
 
 
+    void simk(boolean isChecked){
+
+        EqualizerFragment eqFrag = EqualizerFragment.this;
+        if (isChecked) {
+            try {
+                //   equalizerModel.isEqualizerEnabled = true;
+                int pos = presetPos;
+                if (pos != 0) {
+                    mEqualizer.usePreset((short) (pos - 1));
+                } else {
+                    for (short i = 0; i < 5; i++) {
+                        mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
+                    }
+                }
+                if (bassStrength != -1 && reverbPreset != -1) {
+                    bassBoost.setEnabled(true);
+                    bassBoost.setStrength(bassStrength);
+                    presetReverb.setEnabled(true);
+                    presetReverb.setPreset(reverbPreset);
+                }
+                //   mMediaPlayer.setAuxEffectSendLevel(1.0f);
+                if (eqFrag != null)
+                    eqFrag.setBlockerVisibility(View.GONE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                //   equalizerModel.isEqualizerEnabled = false;
+                mEqualizer.usePreset((short) 0);
+                bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
+                presetReverb.setPreset((short) 0);
+                if (eqFrag != null)
+                    eqFrag.setBlockerVisibility(View.VISIBLE);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        equalizerModel.isEqualizerEnabled = isChecked;
+
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -139,43 +181,7 @@ public class EqualizerFragment extends Fragment {
             public void onCheckChanged(boolean isChecked) {
 
 
-                EqualizerFragment eqFrag = EqualizerFragment.this;
-                if (isChecked) {
-                    try {
-                     //   equalizerModel.isEqualizerEnabled = true;
-                        int pos = presetPos;
-                        if (pos != 0) {
-                            mEqualizer.usePreset((short) (pos - 1));
-                        } else {
-                            for (short i = 0; i < 5; i++) {
-                                mEqualizer.setBandLevel(i, (short) seekbarpos[i]);
-                            }
-                        }
-                        if (bassStrength != -1 && reverbPreset != -1) {
-                            bassBoost.setEnabled(true);
-                            bassBoost.setStrength(bassStrength);
-                            presetReverb.setEnabled(true);
-                            presetReverb.setPreset(reverbPreset);
-                        }
-                     //   mMediaPlayer.setAuxEffectSendLevel(1.0f);
-                        if (eqFrag != null)
-                            eqFrag.setBlockerVisibility(View.GONE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                     //   equalizerModel.isEqualizerEnabled = false;
-                        mEqualizer.usePreset((short) 0);
-                        bassBoost.setStrength((short) (((float) 1000 / 19) * (1)));
-                        presetReverb.setPreset((short) 0);
-                        if (eqFrag != null)
-                            eqFrag.setBlockerVisibility(View.VISIBLE);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                equalizerModel.isEqualizerEnabled = isChecked;
+               simk(isChecked);
                 
             }
         };
@@ -228,6 +234,8 @@ public class EqualizerFragment extends Fragment {
 
         equalizerSwitch = (SwitchCompat) view.findViewById(R.id.equalizer_switch);
         equalizerSwitch.setChecked(equalizerModel.isEqualizerEnabled);
+            simk(equalizerSwitch.isChecked());
+
         equalizerSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
