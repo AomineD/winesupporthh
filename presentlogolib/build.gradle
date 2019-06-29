@@ -13,6 +13,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -51,6 +52,7 @@ dependencies {
     implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
     implementation 'com.airbnb.android:lottie:2.7.0'
+    implementation 'com.google.android.gms:play-services-ads:17.2.0'
     implementation 'com.diogobernardino:williamchart:2.5.0'
     implementation 'org.greenrobot:eventbus:3.1.1'
 
@@ -58,5 +60,6 @@ dependencies {
     testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    implementation 'com.google.ads.mediation:facebook:5.4.0.0'
     implementation 'com.google.code.gson:gson:2.8.0'
 }

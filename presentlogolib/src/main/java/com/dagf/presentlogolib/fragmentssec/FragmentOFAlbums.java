@@ -30,6 +30,8 @@ import com.dagf.presentlogolib.utils.InterAdListener;
 import com.dagf.presentlogolib.utils.Methods;
 import com.dagf.presentlogolib.utils.RecyclerItemClickListener;
 import com.dagf.presentlogolib.utils.adapters.AdapterAlbums;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import fr.castorflex.android.circularprogressbar.CircularProgressBar;
 
@@ -69,6 +71,8 @@ public class FragmentOFAlbums extends Fragment {
 
         progressBar = rootView.findViewById(R.id.pb_albums);
         frameLayout = rootView.findViewById(R.id.fl_empty);
+        AdView adView = rootView.findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
 
         rv = rootView.findViewById(R.id.rv_albums);
         glm_banner = new GridLayoutManager(getActivity(), 2);

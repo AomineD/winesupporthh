@@ -9,7 +9,16 @@
         android:layout_height="match_parent"
         android:background="@color/bg"
         android:orientation="vertical">
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/admob_banner">
 
+        </com.google.android.gms.ads.AdView>
         <Button
             android:id="@+id/button_add_myplaylist"
             android:layout_width="wrap_content"

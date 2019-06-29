@@ -47,6 +47,8 @@ import com.db.chart.view.LineChartView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.gson.Gson;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -293,7 +295,8 @@ public class EqualizerFragment extends Fragment {
         SetupEq();
 
 
-
+AdView adView = view.findViewById(R.id.adView);
+adView.loadAd(new AdRequest.Builder().build());
 
 
      //   equalizerModel.isEqualizerEnabled = preferences.getInt(keyeqenabled, 0) == 1;
@@ -604,9 +607,13 @@ public class EqualizerFragment extends Fragment {
                 .setContentTitlePaint(tp)
                 .setTarget(new ViewTarget(R.id.showcase_view_equalizer, getActivity()))
                 .setContentTitle("Presets")
-                .setContentText("Use one of the available presets")
+                .setContentText("Usa uno de los presets disponibles")
+
                 .build();
         showCase.setButtonText("Next");
+        View v = view.findViewById(R.id.vi);
+        RelativeLayout.LayoutParams is = new RelativeLayout.LayoutParams(v.getLayoutParams().width, v.getLayoutParams().height);
+        showCase.setButtonPosition(is);
         showCase.setButtonPosition(lps);
         showCase.overrideButtonClick(new View.OnClickListener() {
             int count1 = 0;
@@ -617,17 +624,17 @@ public class EqualizerFragment extends Fragment {
                 switch (count1) {
                     case 1:
                         showCase.setTarget(new ViewTarget(R.id.equalizerContainer, getActivity()));
-                        showCase.setContentTitle("Equalizer Controls");
-                        showCase.setContentText("Use the seekbars to control the Individual frequencies");
+                        showCase.setContentTitle("Control de eq");
+                        showCase.setContentText("Usa las barras para cambiar la frecuencia");
                         showCase.setButtonPosition(lps);
-                        showCase.setButtonText("Next");
+                        showCase.setButtonText("Siguiente");
                         break;
                     case 2:
                         showCase.setTarget(new ViewTarget(R.id.controllerBass, getActivity()));
-                        showCase.setContentTitle("Bass and Reverb");
-                        showCase.setContentText("Use these controls to control Bass and Reverb");
+                        showCase.setContentTitle("Bajo y Reverb");
+                        showCase.setContentText("Usa estos controles para controlar el bajo y el reverb");
                         showCase.setButtonPosition(lps);
-                        showCase.setButtonText("Done");
+                        showCase.setButtonText("Terminar");
                         break;
                     case 3:
                         showCase.hide();
@@ -649,8 +656,9 @@ public class EqualizerFragment extends Fragment {
 
         lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
+        lps.addRule(RelativeLayout.ALIGN_PARENT_START);
+        lps.setMargins(100, 0, 0, 150);
+       // int margin = ((Number) (getResources().getDisplayMetrics().density * 12)).intValue();
        // lps.setMargins(margin, margin, margin, navBarHeightSizeinDp + ((Number) (getResources().getDisplayMetrics().density * 5)).intValue());
 
 

@@ -35,6 +35,8 @@ import com.dagf.presentlogolib.utils.DBHelper;
 import com.dagf.presentlogolib.utils.InterAdListener;
 import com.dagf.presentlogolib.utils.Methods;
 import com.dagf.presentlogolib.utils.adapters.AdapterMyPlaylist;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.util.ArrayList;
 
@@ -77,6 +79,9 @@ public class FragmentOFPlaylist extends Fragment {
 
         button_add = rootView.findViewById(R.id.button_add_myplaylist);
         frameLayout = rootView.findViewById(R.id.fl_empty);
+
+        AdView adView = rootView.findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
 
         rv = rootView.findViewById(R.id.rv_myplaylist);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
