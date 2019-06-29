@@ -2,7 +2,9 @@ package com.dagf.presentlogolib.nextview;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,16 +17,25 @@ import android.widget.TextView;
 import com.dagf.presentlogolib.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class NextAdapter extends RecyclerView.Adapter<NextAdapter.NextHolder> {
 
     private ArrayList<NextViewItem> nextViewItems = new ArrayList<>();
     private Context c;
+    private NextViewDagf.OnClickNextView clickNextView;
 
-    public NextAdapter(Context j, @NonNull ArrayList<NextViewItem> items){
+    public void setClickListener(NextViewDagf.OnClickNextView s){
+        if(clickNextView == null){
+            this.clickNextView = s;
+        }
+    }
+
+    public NextAdapter(Context j, @NonNull ArrayList<NextViewItem> items, @NonNull NextViewDagf.OnClickNextView list){
         this.c = j;
         this.nextViewItems = items;
+        this.clickNextView = list;
     }
 
 
@@ -33,7 +44,7 @@ public class NextAdapter extends RecyclerView.Adapter<NextAdapter.NextHolder> {
     @Override
     public NextHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
-        View v = LayoutInflater.from(c).inflate(R.layout.next_view_item, viewGroup);
+        View v = LayoutInflater.from(c).inflate(R.layout.next_view_item, viewGroup, false);
 
         return new NextHolder(v);
     }
@@ -45,26 +56,15 @@ public class NextAdapter extends RecyclerView.Adapter<NextAdapter.NextHolder> {
 
         nextHolder.neim.setText(obj.getName());
 
-        Picasso.get().load(Uri.parse(obj.getUrlthumb())).fit().into(nextHolder.img);
+        Uri thumb = getImageUri(c, obj.getUrlthumb());
+
+        Picasso.get().load(thumb).fit().into(nextHolder.img);
 
         nextHolder.img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                try {
-                    i.setPackage(c.getPackageName());
-
-                    String ur = obj.getUrlmedia();
-                    if(!ur.contains("http://") || ur.contains("https://"))
-                    ur = "http://"+ur;
-
-                    i.setDataAndType(Uri.parse(ur), "video/*");
-                    i.putExtra("title", "Alien Media");
-                    c.startActivity(i);
-                }catch (Exception e){
-                    Log.e("MAIN", "onClick: "+e.getMessage());
-                }
+                clickNextView.clicked(obj);
             }
         });
 
@@ -85,5 +85,13 @@ public class NextAdapter extends RecyclerView.Adapter<NextAdapter.NextHolder> {
             img = itemView.findViewById(R.id.thumb);
             neim = itemView.findViewById(R.id.title_next_view);
         }
+    }
+
+
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
     }
 }

@@ -1,8 +1,15 @@
 package com.dagf.presentlogolib.nextview;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -17,6 +24,7 @@ import android.widget.TextView;
 import com.dagf.presentlogolib.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class NextViewDagf extends RelativeLayout {
@@ -26,25 +34,65 @@ public class NextViewDagf extends RelativeLayout {
       //  initAll();
     }
 
+    public static final int code_permision = 838;
+
     public NextViewDagf(Context context, AttributeSet attrs) {
         super(context, attrs);
 
     }
 
-    public void setItems(ArrayList<NextViewItem> items){
-arrayList = items;
-        initAll();
+    private OnClickNextView clickNextView;
+    public void setItems(ArrayList<NextViewItem> items, OnClickNextView litener){
+arrayList.addAll(items);
+if(arrayList.size() > 0) {
+    //Log.e("MAIN", "setItems: "+(litener!=null));
+    this.clickNextView = litener;
+    initAll();
+
+
+}
     }
 
 
 
+    public void hide(){
+        if(viewerAll != null){
+            viewerAll.setVisibility(GONE);
+        }
+    }
+
+    public void showNextView(){
+        if(viewerAll != null){
+            viewerAll.setVisibility(VISIBLE);
+        }
+    }
+
+    public void showAndReload(){
+        if(viewerAll != null){
+            viewerAll.setVisibility(VISIBLE);
+            initAll();
+        }
+    }
+
+
+    private View viewerAll;
 
     private void initAll(){
-        View inflater = LayoutInflater.from(getContext()).inflate(R.layout.next_view, (ViewGroup) getRootView(), false);
 
-        setupNextView(inflater);
+        if(ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
 
-        addView(inflater);
+            ActivityCompat.requestPermissions((Activity) getContext(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, code_permision);
+
+
+            return;
+        }
+
+        viewerAll = LayoutInflater.from(getContext()).inflate(R.layout.next_view, (ViewGroup) getRootView(), false);
+
+
+
+        addView(viewerAll);
+        setupNextView(viewerAll);
     }
 
     private RecyclerView recyclerView;
@@ -57,7 +105,8 @@ arrayList = items;
 
         recyclerView = inflater.findViewById(R.id.rec_list);
 
-        NextAdapter adapter = new NextAdapter(getContext(), arrayList);
+        NextAdapter adapter = new NextAdapter(getContext(), arrayList, clickNextView);
+        Log.e("MAIN", "setupNextView: "+(clickNextView != null) );
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
 
@@ -71,7 +120,10 @@ arrayList = items;
         ImageView t = first.findViewById(R.id.thumb);
         TextView f = first.findViewById(R.id.title_next_view);
 
-        Picasso.get().load(Uri.parse(arrayList.get(0).getUrlthumb())).fit().into(t);
+        Uri thumb = getImageUri(getContext(), arrayList.get(0).getUrlthumb());
+
+
+        Picasso.get().load(thumb).fit().into(t);
 
         f.setText(arrayList.get(0).getName());
 
@@ -80,24 +132,29 @@ arrayList = items;
             @Override
             public void onClick(View v) {
 
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                try {
-                    i.setPackage(getContext().getPackageName());
-
-                    String ur = arrayList.get(0).getUrlmedia();
-                    if(!ur.contains("http://") || ur.contains("https://"))
-                        ur = "http://"+ur;
-
-                    i.setDataAndType(Uri.parse(ur), "video/*");
-                    i.putExtra("title", "Alien Media");
-                   getContext().startActivity(i);
-                }catch (Exception e){
-                    Log.e("MAIN", "onClick: "+e.getMessage());
-                }
+               if(clickNextView != null){
+                   clickNextView.clicked(arrayList.get(0));
+               }
 
 
             }
         });
 
+    }
+
+
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+try {
+    return Uri.parse(path);
+}catch (Exception e){
+    return Uri.parse("");
+}
+}
+
+    public interface OnClickNextView{
+        void clicked(NextViewItem obj);
     }
 }

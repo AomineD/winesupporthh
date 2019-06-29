@@ -12,9 +12,20 @@
       android:layout_height="match_parent">
 
   </FrameLayout>
+
+
+  <com.dagf.presentlogolib.nextview.NextViewDagf
+      android:layout_width="match_parent"
+      android:id="@+id/nextview"
+      android:layout_alignParentBottom="true"
+      android:layout_height="wrap_content">
+
+  </com.dagf.presentlogolib.nextview.NextViewDagf>
+
   <android.support.design.widget.TabLayout
       android:id="@+id/tablay"
       android:layout_width="match_parent"
+      android:visibility="gone"
       android:layout_height="50dp"
       android:layout_alignParentBottom="true">
 

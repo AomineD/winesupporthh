@@ -21,6 +21,8 @@ import com.dagf.presentlogolib.WineHelper;
 import com.dagf.presentlogolib.eq.EqualizerFragment;
 import com.dagf.presentlogolib.fragmentssec.MusicFragment;
 import com.dagf.presentlogolib.fragmentssec.PlayerService;
+import com.dagf.presentlogolib.nextview.NextViewDagf;
+import com.dagf.presentlogolib.nextview.NextViewItem;
 import com.dagf.presentlogolib.utils.MediafireParser;
 
 import java.io.File;
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+    private NextViewDagf nextViewDagf;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +55,38 @@ public class MainActivity extends AppCompatActivity {
 
         EqualizerFragment.themeColor = getResources().getColor(R.color.colorPrimary);
 
+nextViewDagf = findViewById(R.id.nextview);
 
+ArrayList<NextViewItem> nextViewItems = new ArrayList<>();
+
+NextViewItem item = new NextViewItem();
+
+item.setName("Tom clancys 1");
+
+item.setUrlmedia("http://www.mediafire.com/file/en29m56ia03t5zz/01_J_R_T1_CS.mp4");
+
+        NextViewItem item2 = new NextViewItem();
+
+        item2.setName("Tom clancys 2");
+
+        item2.setUrlmedia("http://www.mediafire.com/file/479410cg6qoe1cb/02_J_R_T1_CS.mp4");
+
+        NextViewItem item3 = new NextViewItem();
+
+        item3.setName("Tom clancys 3");
+
+        item3.setUrlmedia("http://www.mediafire.com/file/l079glsu1g5xkct/03_J_R_T1_CS.mp4");
+
+nextViewItems.add(item);
+nextViewItems.add(item2);
+nextViewItems.add(item3);
+
+nextViewDagf.setItems(nextViewItems, new NextViewDagf.OnClickNextView() {
+    @Override
+    public void clicked(NextViewItem obj) {
+        Toast.makeText(MainActivity.this, obj.getUrlmedia(), Toast.LENGTH_SHORT).show();
+    }
+});
 
         final TabLayout tablay = findViewById(R.id.tablay);
 
@@ -134,6 +170,10 @@ else
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
+
+        if(requestCode == NextViewDagf.code_permision && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            nextViewDagf.showAndReload();
+        }
 
         if(requestCode == WineHelper.keypermission && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             getSupportFragmentManager().beginTransaction().add(R.id.frm, new MusicFragment()).commitAllowingStateLoss();

@@ -29,6 +29,10 @@
         <activity
             android:name="com.dagf.presentlogolib.fragmentssec.Add2OfflinePlaylistActivity"
             android:windowSoftInputMode="adjustPan|adjustNothing" />
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
