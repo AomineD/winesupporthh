@@ -3,12 +3,36 @@ package com.dagf.presentlogolib.nextview;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Random;
 
-public class NextViewItem {
+public class NextViewItem implements Parcelable {
+    protected NextViewItem(Parcel in) {
+        name = in.readString();
+        urlthumb = in.readParcelable(Bitmap.class.getClassLoader());
+        urlmedia = in.readString();
+    }
+
+    public NextViewItem(){
+
+    }
+
+    public static final Creator<NextViewItem> CREATOR = new Creator<NextViewItem>() {
+        @Override
+        public NextViewItem createFromParcel(Parcel in) {
+            return new NextViewItem(in);
+        }
+
+        @Override
+        public NextViewItem[] newArray(int size) {
+            return new NextViewItem[size];
+        }
+    };
+
     public String getName() {
         return name;
     }
@@ -73,4 +97,17 @@ private String urlmedia;
         return bitmap;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(name);
+        dest.writeString(urlmedia);
+        dest.writeValue(urlthumb);
+
+    }
 }
