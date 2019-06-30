@@ -51,17 +51,22 @@ public class NextViewItem implements Parcelable {
     }
 
     public void setUrlmedia(String urlmedia) {
+
+        this.urlmedia = urlmedia;
+    }
+
+
+    public void loadFrame(){
         try {
             Random rand = new Random();
 
             long d = (long)rand.nextInt((180 - 30) + 1) + 30;
-           // Log.e("MAIN", "setUrlmedia: "+d*10000);
+            // Log.e("MAIN", "setUrlmedia: "+d*10000);
             urlthumb = retriveVideoFrameFromVideo(urlmedia, d);
         } catch (Throwable throwable) {
             throwable.printStackTrace();
             Log.e("MAIN", "setUrlmedia: "+throwable.getMessage() );
         }
-        this.urlmedia = urlmedia;
     }
 
     private String name;
