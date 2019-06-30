@@ -100,6 +100,10 @@ if(arrayList.size() > 0) {
 
     private void setupNextView(View inflater) {
 
+        for(int i=0; i < arrayList.size(); i++){
+            arrayList.get(i).loadFrame();
+        }
+
         View first = inflater.findViewById(R.id.item_main);
         setupFirst(first);
 
@@ -119,6 +123,8 @@ if(arrayList.size() > 0) {
 
         ImageView t = first.findViewById(R.id.thumb);
         TextView f = first.findViewById(R.id.title_next_view);
+
+
 
         Uri thumb = getImageUri(getContext(), arrayList.get(0).getUrlthumb());
 
