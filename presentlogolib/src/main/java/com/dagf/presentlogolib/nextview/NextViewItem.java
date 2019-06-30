@@ -111,8 +111,9 @@ private String urlmedia;
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(name);
-        dest.writeString(urlmedia);
         dest.writeValue(urlthumb);
+        dest.writeString(urlmedia);
+
 
     }
 }
