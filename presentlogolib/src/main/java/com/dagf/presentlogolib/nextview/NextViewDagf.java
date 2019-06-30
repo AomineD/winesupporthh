@@ -21,11 +21,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.dagf.presentlogolib.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+
+import static com.dagf.presentlogolib.utils.DBHelper.TAG;
 
 public class NextViewDagf extends RelativeLayout {
 
@@ -44,12 +48,14 @@ public class NextViewDagf extends RelativeLayout {
     private OnClickNextView clickNextView;
     public void setItems(ArrayList<NextViewItem> items, OnClickNextView litener){
 arrayList.addAll(items);
-if(arrayList.size() > 0) {
+if(arrayList.size() > 0 && arrayList.size() < 6) {
     //Log.e("MAIN", "setItems: "+(litener!=null));
     this.clickNextView = litener;
     initAll();
 
 
+}else{
+    new Throwable().printStackTrace();
 }
     }
 
@@ -124,13 +130,15 @@ if(arrayList.size() > 0) {
         ImageView t = first.findViewById(R.id.thumb);
         TextView f = first.findViewById(R.id.title_next_view);
 
+        NextViewItem obj = arrayList.get(0);
 
 
-        Uri thumb = getImageUri(getContext(), arrayList.get(0).getUrlthumb());
 
+        RequestOptions options = new RequestOptions().frame(obj.getFramex());
+       // Log.e(TAG, "setupFirst: "+obj.getUrlmedia()+ " "+obj.getFramex() );
+        Glide.with(getContext()).load(obj.getUrlmedia()).apply(options).into(t);
 
-        Picasso.get().load(thumb).fit().into(t);
-
+      //  Glide.get(getContext()).clearDiskCache();
         f.setText(arrayList.get(0).getName());
 
 
@@ -149,7 +157,7 @@ if(arrayList.size() > 0) {
     }
 
 
-    private Uri getImageUri(Context inContext, Bitmap inImage) {
+   /* private Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
@@ -158,7 +166,7 @@ try {
 }catch (Exception e){
     return Uri.parse("");
 }
-}
+}*/
 
     public interface OnClickNextView{
         void clicked(NextViewItem obj);

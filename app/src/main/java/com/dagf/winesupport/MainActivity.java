@@ -81,12 +81,14 @@ nextViewItems.add(item);
 nextViewItems.add(item2);
 nextViewItems.add(item3);
 
+
 nextViewDagf.setItems(nextViewItems, new NextViewDagf.OnClickNextView() {
     @Override
     public void clicked(NextViewItem obj) {
         Toast.makeText(MainActivity.this, obj.getUrlmedia(), Toast.LENGTH_SHORT).show();
     }
 });
+
 
         final TabLayout tablay = findViewById(R.id.tablay);
 

@@ -9,8 +9,9 @@
     <ImageView
         android:id="@+id/thumb"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:srcCompat="@drawable/alienback_holder" />
+        android:adjustViewBounds="true"
+        android:src="@drawable/alienback_holder"
+        android:layout_height="100dp" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="48dp"

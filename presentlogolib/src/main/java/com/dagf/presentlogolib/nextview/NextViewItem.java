@@ -10,10 +10,12 @@ import android.util.Log;
 import java.util.HashMap;
 import java.util.Random;
 
+import static com.dagf.presentlogolib.utils.DBHelper.TAG;
+
 public class NextViewItem implements Parcelable {
     protected NextViewItem(Parcel in) {
         name = in.readString();
-        urlthumb = in.readParcelable(Bitmap.class.getClassLoader());
+        frameX = in.readLong();
         urlmedia = in.readString();
     }
 
@@ -41,9 +43,7 @@ public class NextViewItem implements Parcelable {
         this.name = name;
     }
 
-    public Bitmap getUrlthumb() {
-        return urlthumb;
-    }
+    private long frameX;
 
 
     public String getUrlmedia() {
@@ -55,22 +55,28 @@ public class NextViewItem implements Parcelable {
         this.urlmedia = urlmedia;
     }
 
+    public Long getFramex(){
+        return frameX;
+    }
+
 
     public void loadFrame(){
-        try {
             Random rand = new Random();
 
-            long d = (long)rand.nextInt((180 - 30) + 1) + 30;
-            // Log.e("MAIN", "setUrlmedia: "+d*10000);
-            urlthumb = retriveVideoFrameFromVideo(urlmedia, d);
+            frameX = (long)rand.nextInt((380 - 150) + 1) + 150;
+
+            frameX = frameX * 1000000;
+
+        try {
+            thumb = retriveVideoFrameFromVideo(getUrlmedia(), frameX);
         } catch (Throwable throwable) {
+            Log.e(TAG, "loadFrame: "+throwable.getMessage());
             throwable.printStackTrace();
-            Log.e("MAIN", "setUrlmedia: "+throwable.getMessage() );
         }
     }
 
+    public Bitmap thumb;
     private String name;
-private Bitmap urlthumb;
 private String urlmedia;
 
     public static Bitmap retriveVideoFrameFromVideo(String videoPath, long tim)throws Throwable
@@ -85,7 +91,7 @@ private String urlmedia;
             else
                 mediaMetadataRetriever.setDataSource(videoPath);
             //   mediaMetadataRetriever.setDataSource(videoPath);
-            bitmap = mediaMetadataRetriever.getFrameAtTime(tim * 10000000, MediaMetadataRetriever.OPTION_CLOSEST);
+            bitmap = mediaMetadataRetriever.getFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST);
         }
         catch (Exception e)
         {
@@ -111,7 +117,7 @@ private String urlmedia;
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(name);
-        dest.writeValue(urlthumb);
+        dest.writeLong(frameX);
         dest.writeString(urlmedia);
 
 
