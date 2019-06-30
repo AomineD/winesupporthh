@@ -17,6 +17,7 @@ public class NextViewItem implements Parcelable {
         name = in.readString();
         frameX = in.readLong();
         urlmedia = in.readString();
+        thumb = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
     }
 
     public NextViewItem(){
@@ -119,6 +120,7 @@ private String urlmedia;
         dest.writeString(name);
         dest.writeLong(frameX);
         dest.writeString(urlmedia);
+        dest.writeValue(thumb);
 
 
     }
