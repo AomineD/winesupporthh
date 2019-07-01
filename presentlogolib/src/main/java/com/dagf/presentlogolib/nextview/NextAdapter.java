@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -84,9 +85,18 @@ public class NextAdapter extends RecyclerView.Adapter<NextAdapter.NextHolder> {
 
 
        // Log.e(TAG, "onBindViewHolder: "+obj.getFramex());
-if(obj.thumb != null)
-        nextHolder.img.setImageBitmap(obj.thumb);
+if(obj.thumb != null) {
 
+
+
+    Glide.with(c).load(obj.thumb).apply(new RequestOptions().centerCrop()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(nextHolder.img);
+
+    nextHolder.play_ic.setVisibility(View.VISIBLE);
+    nextHolder.bar.setVisibility(View.GONE);
+}else{
+    nextHolder.play_ic.setVisibility(View.GONE);
+    nextHolder.bar.setVisibility(View.VISIBLE);
+}
 
 
     }
@@ -100,11 +110,15 @@ if(obj.thumb != null)
 
         private ImageView img;
         private TextView neim;
+        private ImageView play_ic;
+        private ProgressBar bar;
 
         public NextHolder(@NonNull View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.thumb);
             neim = itemView.findViewById(R.id.title_next_view);
+            play_ic = itemView.findViewById(R.id.playicon);
+            bar = itemView.findViewById(R.id.progress_bar);
         }
     }
 }

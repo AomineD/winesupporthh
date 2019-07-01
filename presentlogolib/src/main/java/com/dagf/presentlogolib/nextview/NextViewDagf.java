@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,16 +19,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.dagf.presentlogolib.R;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.dagf.presentlogolib.utils.DBHelper.TAG;
 
@@ -45,14 +51,21 @@ public class NextViewDagf extends RelativeLayout {
 
     }
 
+    private long timeMilis = 1800;
+
+    public void setTimeMilis(float seconds){
+        this.timeMilis = (long) (seconds * 1000);
+    }
+
     private OnClickNextView clickNextView;
     public void setItems(ArrayList<NextViewItem> items, OnClickNextView litener){
 arrayList.addAll(items);
 if(arrayList.size() > 0 && arrayList.size() < 6) {
     //Log.e("MAIN", "setItems: "+(litener!=null));
     this.clickNextView = litener;
-    initAll();
 
+    initView();
+    loadFramesOnePerOne();
 
 }else{
     new Throwable().printStackTrace();
@@ -74,14 +87,83 @@ if(arrayList.size() > 0 && arrayList.size() < 6) {
     }
 
     public void showAndReload(){
-        if(viewerAll != null){
-            viewerAll.setVisibility(VISIBLE);
-            initAll();
-        }
+
+      if(viewerAll != null) {
+          viewerAll.setVisibility(VISIBLE);
+          initAll();
+      }
+
     }
 
 
     private View viewerAll;
+
+    int index = 0;
+    private ArrayList<Boolean> readys = new ArrayList<>();
+
+    public boolean isReadyPerIndex(int index){
+        if(index < readys.size()) {
+           // Log.e(TAG, "isReadyPerIndex: "+index + " READYS ES "+readys.get(index));
+            return readys.get(index);
+        }
+        else{
+            return false;
+        }
+    }
+
+    private void loadFramesOnePerOne(){
+
+        if(arrayList.size() < 1)
+            return;
+
+  final Timer t = new Timer();
+
+
+
+      t.schedule(new TimerTask() {
+          @Override
+          public void run() {
+             // Log.e(TAG, "run: "+index+ " size "+arrayList.size() );
+                      if(index < arrayList.size()) {
+                          arrayList.get(index).loadBit = new NextViewItem.LoadBit() {
+                              @Override
+                              public void onBitLoaded(int pos, @Nullable Bitmap bit) {
+                                  ((Activity)getContext()).runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          readys.add(true);
+                                          adapter.notifyDataSetChanged();
+                                      }
+                                  });
+
+                              }
+                          };
+
+                          arrayList.get(index).loadFrame();
+                          index++;
+                      }else {
+                          t.cancel();
+                      }
+
+
+
+          }
+      }, timeMilis, timeMilis);
+
+
+
+
+
+    }
+
+    private void initView(){
+        viewerAll = LayoutInflater.from(getContext()).inflate(R.layout.next_view, (ViewGroup) getRootView(), false);
+
+        for(int i=0; i < arrayList.size(); i++){
+            arrayList.get(i).pos = i;
+        }
+        adapter = new NextAdapter(getContext(), arrayList, clickNextView);
+    }
 
     private void initAll(){
 
@@ -93,7 +175,7 @@ if(arrayList.size() > 0 && arrayList.size() < 6) {
             return;
         }
 
-        viewerAll = LayoutInflater.from(getContext()).inflate(R.layout.next_view, (ViewGroup) getRootView(), false);
+
 
 
 
@@ -104,18 +186,15 @@ if(arrayList.size() > 0 && arrayList.size() < 6) {
     private RecyclerView recyclerView;
     private ArrayList<NextViewItem> arrayList = new ArrayList<>();
 
+    private NextAdapter adapter;
     private void setupNextView(View inflater) {
-
-        for(int i=0; i < arrayList.size(); i++){
-            arrayList.get(i).loadFrame();
-        }
 
         View first = inflater.findViewById(R.id.item_main);
         setupFirst(first);
 
         recyclerView = inflater.findViewById(R.id.rec_list);
 
-        NextAdapter adapter = new NextAdapter(getContext(), arrayList, clickNextView);
+
         Log.e("MAIN", "setupNextView: "+(clickNextView != null) );
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
@@ -127,17 +206,36 @@ if(arrayList.size() > 0 && arrayList.size() < 6) {
     /** SETEAR EL SIGUIENTE **/
     private void setupFirst(View first) {
 
-        ImageView t = first.findViewById(R.id.thumb);
+        final ImageView t = first.findViewById(R.id.thumb);
         TextView f = first.findViewById(R.id.title_next_view);
+        final ProgressBar bar = first.findViewById(R.id.progress_bar);
+        final ImageView icon = first.findViewById(R.id.playicon);
 
-        NextViewItem obj = arrayList.get(0);
+        final NextViewItem obj = arrayList.get(0);
+        obj.loadBit = new NextViewItem.LoadBit() {
+            @Override
+            public void onBitLoaded(int pos, Bitmap bit) {
+                if(pos == 0) {
 
+              if (bit != null) {
+                  icon.setVisibility(View.VISIBLE);
+                  bar.setVisibility(View.GONE);
+                  Glide.with(getContext()).load(bit).apply(new RequestOptions().centerCrop()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(t);
 
+              }
+          }
+            }
+        };
 
-        RequestOptions options = new RequestOptions().frame(obj.getFramex());
-       // Log.e(TAG, "setupFirst: "+obj.getUrlmedia()+ " "+obj.getFramex() );
-        Glide.with(getContext()).load(obj.getUrlmedia()).apply(options).into(t);
-
+if(obj.thumb != null) {
+    Glide.with(getContext()).load(obj.thumb).apply(new RequestOptions().centerCrop()).diskCacheStrategy(DiskCacheStrategy.AUTOMATIC).into(t);
+    icon.setVisibility(View.VISIBLE);
+    bar.setVisibility(View.GONE);
+}else {
+    icon.setVisibility(View.GONE);
+    bar.setVisibility(View.VISIBLE);
+    obj.loadFrame();
+}
       //  Glide.get(getContext()).clearDiskCache();
         f.setText(arrayList.get(0).getName());
 
@@ -155,18 +253,6 @@ if(arrayList.size() > 0 && arrayList.size() < 6) {
         });
 
     }
-
-
-   /* private Uri getImageUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-try {
-    return Uri.parse(path);
-}catch (Exception e){
-    return Uri.parse("");
-}
-}*/
 
     public interface OnClickNextView{
         void clicked(NextViewItem obj);

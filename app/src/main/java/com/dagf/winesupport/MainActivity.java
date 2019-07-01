@@ -74,13 +74,30 @@ item.setUrlmedia("http://www.mediafire.com/file/en29m56ia03t5zz/01_J_R_T1_CS.mp4
         NextViewItem item3 = new NextViewItem();
 
         item3.setName("Tom clancys 3");
-
         item3.setUrlmedia("http://www.mediafire.com/file/l079glsu1g5xkct/03_J_R_T1_CS.mp4");
+
+        NextViewItem item4 = new NextViewItem();
+        item4.setUrlmedia("http://www.mediafire.com/file/l079glsu1g5xkct/03_J_R_T1_CS.mp4");
+        item4.setName("Tom clancys 4");
+
+        NextViewItem item5 = new NextViewItem();
+        item5.setUrlmedia("http://www.mediafire.com/file/l079glsu1g5xkct/03_J_R_T1_CS.mp4");
+        item5.setName("Tom clancys 5");
+
+        NextViewItem item6 = new NextViewItem();
+        item6.setName("Tom clancys 6");
+
+        item6.setUrlmedia("http://www.mediafire.com/file/l079glsu1g5xkct/03_J_R_T1_CS.mp4");
 
 nextViewItems.add(item);
 nextViewItems.add(item2);
 nextViewItems.add(item3);
+nextViewItems.add(item4);
+      //  nextViewItems.add(item5);
+        nextViewItems.add(item6);
 
+
+        nextViewDagf.setTimeMilis(13f);
 
 nextViewDagf.setItems(nextViewItems, new NextViewDagf.OnClickNextView() {
     @Override
@@ -89,8 +106,23 @@ nextViewDagf.setItems(nextViewItems, new NextViewDagf.OnClickNextView() {
     }
 });
 
+new Timer().schedule(new TimerTask() {
+    @Override
+    public void run() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.e("MAIN", "run: "+nextViewDagf.isReadyPerIndex(0));
+                if(nextViewDagf.isReadyPerIndex(0)){
+                    nextViewDagf.showAndReload();
+                }
+            }
+        });
+    }
+}, 30000);
 
-        final TabLayout tablay = findViewById(R.id.tablay);
+
+final TabLayout tablay = findViewById(R.id.tablay);
 
 
         tablay.addTab(tablay.newTab().setIcon(R.drawable.alien).setText("Inicio"));

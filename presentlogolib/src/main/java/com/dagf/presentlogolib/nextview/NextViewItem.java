@@ -5,6 +5,7 @@ import android.media.MediaMetadataRetriever;
 import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -24,6 +25,16 @@ public class NextViewItem implements Parcelable {
 
     }
 
+    public void setlistener(LoadBit l){
+        this.loadBit = l;
+    }
+
+    public interface LoadBit{
+        void onBitLoaded(int pos, @Nullable Bitmap bit);
+    }
+
+
+    public LoadBit loadBit;
     public static final Creator<NextViewItem> CREATOR = new Creator<NextViewItem>() {
         @Override
         public NextViewItem createFromParcel(Parcel in) {
@@ -62,14 +73,20 @@ public class NextViewItem implements Parcelable {
 
 
     public void loadFrame(){
-            Random rand = new Random();
+
+        if(thumb != null){
+            return;
+        }
+
+        Random rand = new Random();
 
             frameX = (long)rand.nextInt((380 - 150) + 1) + 150;
 
             frameX = frameX * 1000000;
 
         try {
-            thumb = retriveVideoFrameFromVideo(getUrlmedia(), frameX);
+
+            thumb = retriveVideoFrameFromVideo(getUrlmedia(), frameX, pos, loadBit);
         } catch (Throwable throwable) {
             Log.e(TAG, "loadFrame: "+throwable.getMessage());
             throwable.printStackTrace();
@@ -79,8 +96,9 @@ public class NextViewItem implements Parcelable {
     public Bitmap thumb;
     private String name;
 private String urlmedia;
+    public int pos = 0;
 
-    public static Bitmap retriveVideoFrameFromVideo(String videoPath, long tim)throws Throwable
+    public static Bitmap retriveVideoFrameFromVideo(String videoPath, long tim, int pos, LoadBit loadBit)throws Throwable
     {
         Bitmap bitmap = null;
         MediaMetadataRetriever mediaMetadataRetriever = null;
@@ -92,7 +110,12 @@ private String urlmedia;
             else
                 mediaMetadataRetriever.setDataSource(videoPath);
             //   mediaMetadataRetriever.setDataSource(videoPath);
-            bitmap = mediaMetadataRetriever.getFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST);
+            if(Build.VERSION.SDK_INT < 27)
+            bitmap = mediaMetadataRetriever.getFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            else
+                bitmap = mediaMetadataRetriever.getScaledFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST, 120, 120);
+            loadBit.onBitLoaded(pos, bitmap);
+
         }
         catch (Exception e)
         {
@@ -106,6 +129,7 @@ private String urlmedia;
                 mediaMetadataRetriever.release();
             }
         }
+        Log.e(TAG, "retriveVideoFrameFromVideo: "+pos);
         return bitmap;
     }
 
