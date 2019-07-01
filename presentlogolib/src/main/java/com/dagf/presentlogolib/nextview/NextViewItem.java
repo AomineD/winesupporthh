@@ -80,7 +80,7 @@ public class NextViewItem implements Parcelable {
 
         Random rand = new Random();
 
-            frameX = (long)rand.nextInt((380 - 150) + 1) + 150;
+            frameX = (long)rand.nextInt((2800 - 450) + 1) + 450;
 
             frameX = frameX * 1000000;
 
@@ -111,7 +111,7 @@ private String urlmedia;
                 mediaMetadataRetriever.setDataSource(videoPath);
             //   mediaMetadataRetriever.setDataSource(videoPath);
             if(Build.VERSION.SDK_INT < 27)
-            bitmap = mediaMetadataRetriever.getFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            bitmap = mediaMetadataRetriever.getFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST);
             else
                 bitmap = mediaMetadataRetriever.getScaledFrameAtTime(tim, MediaMetadataRetriever.OPTION_CLOSEST, 120, 120);
             loadBit.onBitLoaded(pos, bitmap);
