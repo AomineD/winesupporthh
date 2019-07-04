@@ -17,6 +17,7 @@
   <com.dagf.presentlogolib.nextview.NextViewDagf
       android:layout_width="match_parent"
       android:id="@+id/nextview"
+      android:visibility="gone"
       android:layout_alignParentBottom="true"
       android:layout_height="wrap_content">
 
@@ -25,7 +26,7 @@
   <android.support.design.widget.TabLayout
       android:id="@+id/tablay"
       android:layout_width="match_parent"
-      android:visibility="gone"
+      android:visibility="visible"
       android:layout_height="50dp"
       android:layout_alignParentBottom="true">
 
