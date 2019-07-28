@@ -4,4 +4,6 @@
     <color name="colorListItem">#111111</color>
 
     <color name="col">#B24242</color>
+
+    <color name="transparent">#00FFFFFF</color>
 </resources>

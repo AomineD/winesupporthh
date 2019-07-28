@@ -74,6 +74,9 @@
     <string name="admob_banner">ca-app-pub-3940256099942544/6300978111</string>
     <string name="alsoin">Siguiente...</string>
     <string name="caninterest">Te pueden interesar</string>
+    <string name="update_dialog_title">¡Actualización nueva!</string>
+    <string name="update_dialog_desc">Hay una nueva actualización disponible, errores arreglados, nuevas cosas y demás</string>
+    <string name="installit">Descargar e instalar</string>
 
     <!--  COLORS -->
 
