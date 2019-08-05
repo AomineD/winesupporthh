@@ -1,5 +1,6 @@
 package com.dagf.presentlogolib.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.util.Log;
@@ -18,7 +19,9 @@ public class Updater {
 
     public static boolean ThereUpdate;
 
-    public static void check(final Context mc, String urlBase) throws PackageManager.NameNotFoundException {
+    public static UpdateDialog updateDialog;
+
+    public static void check(final Activity mc, String urlBase) throws PackageManager.NameNotFoundException {
         RequestQueue queue = Volley.newRequestQueue(mc);
 
         String pack = mc.getPackageName();
@@ -37,11 +40,12 @@ public class Updater {
                     if(object.has("1")){
                         if(object.getString("1").equals("update")){
 
-                            UpdateDialog dialog = new UpdateDialog(mc, basen+object.getString("url"));
+                            updateDialog = new UpdateDialog(mc, basen+object.getString("url"));
 
-                            dialog.show();
+                            updateDialog.show();
 
-                        }else{
+                        }else
+                            {
                             ThereUpdate = false;
                         }
                     }else{
@@ -63,5 +67,12 @@ public class Updater {
 
 
         queue.add(request);
+    }
+
+
+    public static void NowOpenAPK(){
+        if(updateDialog != null){
+            updateDialog.openApk();
+        }
     }
 }

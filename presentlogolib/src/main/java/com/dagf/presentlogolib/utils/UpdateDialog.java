@@ -1,5 +1,6 @@
 package com.dagf.presentlogolib.utils;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
@@ -7,9 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.FileProvider;
+
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,12 +27,13 @@ import android.widget.Toast;
 import com.dagf.presentlogolib.R;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.dagf.presentlogolib.utils.DBHelper.TAG;
 
 public class UpdateDialog extends AlertDialog {
+    public static final int MY_PERMISSIONS_INSTALLFROM_UNKWONSOURCES = 252;
+    public static final int key_unnistall = 953;
+
     protected UpdateDialog(Context context) {
         super(context);
     }
@@ -35,8 +41,10 @@ public class UpdateDialog extends AlertDialog {
 
     private String urlT = "";
 
-    public UpdateDialog(Context context, String urlTO){
+    private Activity activity;
+    public UpdateDialog(Activity context, String urlTO){
         super(context);
+        this.activity = context;
 this.urlT = urlTO;
     }
 
@@ -61,9 +69,11 @@ this.urlT = urlTO;
         click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
 DownloadNow();
-textView.setText("Descargando...");
+
 click.setEnabled(false);
+
             }
         });
     }
@@ -71,15 +81,31 @@ click.setEnabled(false);
 
 
     public void DownloadNow(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (!getContext().getPackageManager().canRequestPackageInstalls()) {
+                activity.startActivityForResult(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).setData(Uri.parse(String.format("package:%s", getContext().getPackageName()))), MY_PERMISSIONS_INSTALLFROM_UNKWONSOURCES);
+                return;
+            }
+        }
+
+        textView.setText("Descargando...");
+
         DownloadManager.Request dmr = new DownloadManager.Request(Uri.parse(urlT));
 
-// If you know file name
-       // String fileName = getContext().getPackageName()+".apk";
 
-//Alternative if you don't know filename
         String fileName = URLUtil.guessFileName(urlT, null, MimeTypeMap.getFileExtensionFromUrl(urlT));
 
         namefil = fileName;
+
+        String s  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                + "/"+namefil;
+        File file = new File(s);
+
+        if(file.exists()){
+            file.delete();
+        }
+
         dmr.setTitle(fileName);
         dmr.setDescription("apk file"); //optional
         dmr.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
@@ -93,40 +119,81 @@ click.setEnabled(false);
 
     BroadcastReceiver onComplete = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-        //    Log.e("MAIN", "onReceive: yeah" );
 
             textView.setText("¡Descargado!");
-           // Toast.makeText(ctxt, "Descargado...", Toast.LENGTH_SHORT).show();
 
-            new Timer().schedule(new TimerTask() {
-                @Override
+            Thread timer = new Thread() {
                 public void run() {
-                    openApk();
+                    try {
+                        sleep(2000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
+                        dismiss();
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            openApk();
+
+                            }
+                        });
+
+                    }
                 }
-            }, 2000);
+            };
+            timer.start();
+
 
         }
     };
 
     String namefil = "";
-    private void openApk() {
+    public void openApk() {
         try {
-            File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                    + "/"+namefil);//name here is the name of any string you want to pass to the method
-           // Log.e(TAG, "openApk: " + Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/"+namefil);
-            Uri uri = Uri.fromFile(file);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setDataAndType(uri, "application/vnd.android.package-archive");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            getContext().startActivity(intent);
+            String s  = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                    + "/"+namefil;
+            File file = new File(s);//name here is the name of any string you want to pass to the method
+
+            Log.e(TAG, "openApk: " + file.getAbsolutePath());
+
+        //    Toast.makeText(getContext(), s, Toast.LENGTH_SHORT).show();
+            Intent downloadIntent;
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                String MY_PROVIDER = getContext().getApplicationContext().getPackageName() + ".fileprovider";
+                Uri apkUri = FileProvider.getUriForFile(getContext(),  MY_PROVIDER, file);
+
+
+
+                getContext().grantUriPermission(MY_PROVIDER, apkUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                getContext().grantUriPermission(MY_PROVIDER, apkUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                getContext().grantUriPermission(MY_PROVIDER, apkUri, Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+
+
+                downloadIntent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+                downloadIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+                //intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
+                downloadIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                downloadIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                downloadIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            } else {
+                downloadIntent = new Intent(Intent.ACTION_VIEW);
+                downloadIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                downloadIntent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            }
+
+            getContext().startActivity(downloadIntent);
+            activity.finish();
+            Log.e(TAG, "openApk new: "+ downloadIntent.getData().toString());
         }catch (Exception e){
+            Toast.makeText(activity, e.getMessage(), Toast.LENGTH_SHORT).show();
             Log.e(TAG, "openApk ERROR: "+e.getMessage());
         }
     }
 
     BroadcastReceiver onNotificationClick=new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent intent) {
-            Toast.makeText(ctxt, "Ummmm...hi!", Toast.LENGTH_LONG).show();
+   //         Toast.makeText(ctxt, "Ummmm...hi!", Toast.LENGTH_LONG).show();
         }
     };
 

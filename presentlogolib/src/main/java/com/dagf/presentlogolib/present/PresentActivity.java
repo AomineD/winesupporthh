@@ -1,19 +1,15 @@
 package com.dagf.presentlogolib.present;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.VideoView;
 
 import com.dagf.presentlogolib.R;
-
-import java.util.prefs.Preferences;
 
 public class PresentActivity extends AppCompatActivity {
     public static boolean isAlreadyViewed(Activity j) {

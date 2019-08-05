@@ -38,7 +38,7 @@
         android:background="@color/bg"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_dialog_playlist"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -64,7 +64,7 @@
             android:layout_marginBottom="10dp"
             android:background="@drawable/line_horizontal_grey"/>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_close_dialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
                 android:layout_weight="1"
                 android:hint="@string/enter_playlist_name" />
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_add"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -101,7 +101,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_dialog_addplaylist"
             android:layout_width="match_parent"
             android:layout_height="55dp"

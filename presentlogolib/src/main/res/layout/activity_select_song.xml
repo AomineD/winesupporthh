@@ -7,7 +7,7 @@
     android:orientation="vertical"
     tools:context=".SelectSongActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar_select"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -17,7 +17,7 @@
         app:title="@string/add_songs"
         android:paddingEnd="10dp"/>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_select"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -16,10 +16,10 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.media.session.MediaButtonReceiver;
+
+import androidx.annotation.Nullable;
+import androidx.core.app.NotificationCompat;
+import androidx.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.telephony.TelephonyManager;
@@ -65,9 +65,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Random;
 
 import static com.dagf.presentlogolib.utils.DBHelper.TAG;
@@ -569,7 +566,7 @@ vrgachamo = audioSessionId;
                     MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS |
                             MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-            notification.setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
+            notification.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                     .setMediaSession(mMediaSession.getSessionToken())
                     .setShowCancelButton(true)
                     .setShowActionsInCompactView(0, 1, 2)

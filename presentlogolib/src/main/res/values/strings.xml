@@ -100,6 +100,8 @@
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#FFEB3B</color>
     <color name="grey">#878787</color>
+
+    <color name="greys">#B9B9B9</color>
     <color name="text_title">#323232</color>
     <color name="bg">#F6F7F8</color>
     <color name="text_desc">#878787</color>
