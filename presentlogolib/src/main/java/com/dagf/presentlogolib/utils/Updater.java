@@ -24,17 +24,19 @@ public class Updater {
     public static void check(final Activity mc, String urlBase) throws PackageManager.NameNotFoundException {
         RequestQueue queue = Volley.newRequestQueue(mc);
 
-        String pack = mc.getPackageName();
-        urlBase = urlBase.replace("api/", "");
+        String pack = "com.reva.app.pelispluschromecast";//mc.getPackageName();
+        urlBase = urlBase.replace("/api", "");
+      //  Log.e("MAIN", "check: "+urlBase );
        final String basen = urlBase;
 
-        urlBase = urlBase + "updater/get_update?package=" + pack + "&ver="+mc.getPackageManager().getPackageInfo(pack, 0).versionName;
-
+        urlBase = urlBase + "/updater/get_update?package=" + pack + "&ver="+"1.0.20";//mc.getPackageManager().getPackageInfo(pack, 0).versionName;
+//Log.e("MAIN", "url "+urlBase);
         StringRequest request = new StringRequest(Request.Method.GET, urlBase, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
 
                 try {
+                   // Log.e("MAIN", "onResponse: "+response );
                     JSONObject object = new JSONObject(response);
 
                     if(object.has("1")){

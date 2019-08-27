@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">presentlogolib</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -95,6 +95,7 @@
     <color name="gplus_color_1">#3e802f</color>
     <color name="gplus_color_2">#f4b400</color>
     <color name="gplus_color_3">#427fed</color>
+
     <color name="gplus_color_4">#b23424</color>
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
@@ -113,9 +114,6 @@
     <color name="white">#ffffff</color>
 
 
-
-
-
     <!-- STYLE -->
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -127,7 +125,7 @@
     </style>
 
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorAccent">@color/white</item>
     </style>
 

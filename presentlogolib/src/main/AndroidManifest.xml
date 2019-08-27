@@ -5,14 +5,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
 
-    <application>
-        <activity android:name=".present.PresentActivity">
-
-        </activity>
+    <application android:networkSecurityConfig="@xml/network_security_config">
+        <activity android:name="com.wine.supportv2.appodeal.GdprConsent"></activity>
+        <activity android:name=".present.PresentActivity"></activity>
 
         <provider
             android:name=".utils.DagfProvider"
@@ -21,25 +20,24 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths"/>
+                android:resource="@xml/provider_paths" />
         </provider>
+
         <service
-            android:name="com.dagf.presentlogolib.fragmentssec.PlayerService"
+            android:name=".fragmentssec.PlayerService"
             android:exported="false" />
 
-
         <activity
-            android:name="com.dagf.presentlogolib.fragmentssec.SelectSongActivity"
-            android:windowSoftInputMode="adjustPan|adjustNothing" />
-
-        <activity
-            android:name="com.dagf.presentlogolib.fragmentssec.SongByOfflineActivity"
+            android:name=".fragmentssec.SelectSongActivity"
             android:windowSoftInputMode="adjustPan|adjustNothing" />
         <activity
-            android:name="com.dagf.presentlogolib.fragmentssec.SongByOFFPlaylistActivity"
+            android:name=".fragmentssec.SongByOfflineActivity"
             android:windowSoftInputMode="adjustPan|adjustNothing" />
         <activity
-            android:name="com.dagf.presentlogolib.fragmentssec.Add2OfflinePlaylistActivity"
+            android:name=".fragmentssec.SongByOFFPlaylistActivity"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name=".fragmentssec.Add2OfflinePlaylistActivity"
             android:windowSoftInputMode="adjustPan|adjustNothing" />
 
         <meta-data

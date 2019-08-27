@@ -42,17 +42,19 @@ public class MainActivity extends AppCompatActivity {
       //  WineHelper.openPresentation(this, 1);
 
 */
+        if(WineHelper.checkPermissionWrite(this)){
+            try {
+                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api");
+                Log.e("MAIN", "onCreate: LISTO" );
+            } catch (PackageManager.NameNotFoundException e) {
+                Log.e("MAIN", "onCreate: "+e.getMessage());
+                e.printStackTrace();
+            }
+        }else{
+            WineHelper.requestPermissionWrite(this);
+        }
 
-if(WineHelper.checkPermissionWrite(this)) {
-    try {
-        Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api/");
-    } catch (PackageManager.NameNotFoundException e) {
-        Log.e("MAIN", "onCreate: "+e.getMessage() );
-        e.printStackTrace();
-    }
-}
-    else
-    WineHelper.requestPermissionWrite(this);
+       // AdsController.InitializeAppo(this, "bacc6cca6df83e71cb5e0aa778526952df968f11d0164d1f");
 
     }
 

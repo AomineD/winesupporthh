@@ -14,11 +14,23 @@ import java.util.Random;
 import static com.dagf.presentlogolib.utils.DBHelper.TAG;
 
 public class NextViewItem implements Parcelable {
+
     protected NextViewItem(Parcel in) {
         name = in.readString();
         frameX = in.readLong();
         urlmedia = in.readString();
         thumb = (Bitmap) in.readValue(Bitmap.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(name);
+        dest.writeLong(frameX);
+        dest.writeString(urlmedia);
+        dest.writeValue(thumb);
+
+
     }
 
     public NextViewItem(){
@@ -138,14 +150,5 @@ private String urlmedia;
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeString(name);
-        dest.writeLong(frameX);
-        dest.writeString(urlmedia);
-        dest.writeValue(thumb);
-
-
-    }
 }
