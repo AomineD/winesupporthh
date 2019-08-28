@@ -87,4 +87,11 @@ public class Updater {
             updateDialog.openApk();
         }
     }
+
+    public static void TryDownloadAgain() {
+
+        if (updateDialog != null) {
+     updateDialog.downloadAgain();
+        }
+    }
 }

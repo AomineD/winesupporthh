@@ -89,6 +89,9 @@ DownloadNow();
     }
 
 
+    public void downloadAgain(){
+        DownloadNow();
+    }
 
     public void DownloadNow(){
 
