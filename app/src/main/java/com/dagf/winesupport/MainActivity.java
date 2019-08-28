@@ -44,7 +44,12 @@ public class MainActivity extends AppCompatActivity {
 */
         if(WineHelper.checkPermissionWrite(this)){
             try {
-                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api");
+                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api", new Updater.OnSkipListener() {
+                    @Override
+                    public void onSkip() {
+
+                    }
+                });
                 Log.e("MAIN", "onCreate: LISTO" );
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e("MAIN", "onCreate: "+e.getMessage());
@@ -65,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == UpdateDialog.MY_PERMISSIONS_INSTALLFROM_UNKWONSOURCES){
             Log.e("MAIN", "onActivityResult: SI ES ACT");
             try {
-                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api/");
+                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api/", new Updater.OnSkipListener() {
+                    @Override
+                    public void onSkip() {
+
+                    }
+                });
 
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e("MAIN", "onCreate: "+e.getMessage() );
@@ -90,7 +100,12 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode == WineHelper.keypermission && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
             try {
-                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api/");
+                Updater.check(this, "https://moviesapp.website/secure/cpanels/admin-movie-tv/api/", new Updater.OnSkipListener() {
+                    @Override
+                    public void onSkip() {
+
+                    }
+                });
 
             } catch (PackageManager.NameNotFoundException e) {
                 Log.e("MAIN", "onCreate: "+e.getMessage() );

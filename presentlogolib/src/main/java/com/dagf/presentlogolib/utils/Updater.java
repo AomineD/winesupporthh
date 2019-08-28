@@ -19,17 +19,22 @@ public class Updater {
 
     public static boolean ThereUpdate;
 
+    public interface OnSkipListener{
+        void onSkip();
+    }
+
     public static UpdateDialog updateDialog;
 
-    public static void check(final Activity mc, String urlBase) throws PackageManager.NameNotFoundException {
+    public static void check(final Activity mc, String urlBase, final OnSkipListener listener) throws PackageManager.NameNotFoundException {
         RequestQueue queue = Volley.newRequestQueue(mc);
 
         String pack = mc.getPackageName();
-        urlBase = urlBase.replace("/api", "");
-      //  Log.e("MAIN", "check: "+urlBase );
+        Log.e("MAIN", "ches: "+urlBase );
+        urlBase = urlBase.replace("api", "");
+        Log.e("MAIN", "check: "+urlBase );
        final String basen = urlBase;
 
-        urlBase = urlBase + "/updater/get_update?package=" + pack + "&ver="+mc.getPackageManager().getPackageInfo(pack, 0).versionName;
+        urlBase = urlBase + "updater/get_update?package=" + pack + "&ver="+mc.getPackageManager().getPackageInfo(pack, 0).versionName;
 //Log.e("MAIN", "url "+urlBase);
         StringRequest request = new StringRequest(Request.Method.GET, urlBase, new Response.Listener<String>() {
             @Override
@@ -42,10 +47,15 @@ public class Updater {
                     if(object.has("1")){
                         if(object.getString("1").equals("update")){
 
+
+                        //    Log.e("MAIN", "onResponse: "+basen+object.getString("url") );
                             updateDialog = new UpdateDialog(mc, basen+object.getString("url"));
+
+                            updateDialog.setSkipListener(listener);
 
                             updateDialog.show();
 
+                            ThereUpdate = true;
                         }else
                             {
                             ThereUpdate = false;

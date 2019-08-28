@@ -40,7 +40,7 @@ public class UpdateDialog extends AlertDialog {
 
 
     private String urlT = "";
-
+    View click;
     private Activity activity;
     public UpdateDialog(Activity context, String urlTO){
         super(context);
@@ -62,8 +62,18 @@ this.urlT = urlTO;
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getWindow().setBackgroundDrawable(ActivityCompat.getDrawable(getContext(), R.color.transparent));
 
-        final View click = findViewById(R.id.installit);
+        click = findViewById(R.id.installit);
 
+
+        View skipView= findViewById(R.id.skip);
+
+        skipView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                skipListener.onSkip();
+                dismiss();
+            }
+        });
 
         textView = findViewById(R.id.texting);
         click.setOnClickListener(new View.OnClickListener() {
@@ -72,7 +82,7 @@ this.urlT = urlTO;
 
 DownloadNow();
 
-click.setEnabled(false);
+
 
             }
         });
@@ -91,6 +101,8 @@ click.setEnabled(false);
 
         textView.setText("Descargando...");
 
+        Log.e(TAG, "DownloadNow: "+urlT);
+
         DownloadManager.Request dmr = new DownloadManager.Request(Uri.parse(urlT));
 
 
@@ -107,13 +119,14 @@ click.setEnabled(false);
         }
 
         dmr.setTitle(fileName);
-        dmr.setDescription("apk file"); //optional
+        dmr.setDescription("Actualizacion de "+getContext().getString(R.string.app_name)); //optional
         dmr.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName);
         dmr.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
         dmr.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
         DownloadManager manager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
         dmr.setVisibleInDownloadsUi(true);
         manager.enqueue(dmr);
+        click.setEnabled(false);
     }
 
 
@@ -174,7 +187,9 @@ click.setEnabled(false);
                 downloadIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
                 //intent.setDataAndType(fileUri, "application/vnd.android.package-archive");
                 downloadIntent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
-                downloadIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+               downloadIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                downloadIntent.putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true);
+                Log.e(TAG, "openApk: "+apkUri);
                 downloadIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
             } else {
                 downloadIntent = new Intent(Intent.ACTION_VIEW);
@@ -202,5 +217,10 @@ click.setEnabled(false);
         getContext().unregisterReceiver(onNotificationClick);
         getContext().unregisterReceiver(onComplete);
         super.onDetachedFromWindow();
+    }
+
+    private Updater.OnSkipListener skipListener;
+    public void setSkipListener(Updater.OnSkipListener listener) {
+this.skipListener = listener;
     }
 }

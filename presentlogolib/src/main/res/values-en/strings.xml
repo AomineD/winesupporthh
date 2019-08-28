@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="update_dialog_title">¡New Update!</string>
+    <string name="update_dialog_desc">There are a new update, bugs fixed, new stuff and more</string>
+    <string name="installit">Download and install</string>
+    <string name="skip_update">Skip</string>
+</resources>

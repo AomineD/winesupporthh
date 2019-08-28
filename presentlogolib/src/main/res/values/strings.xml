@@ -77,6 +77,7 @@
     <string name="update_dialog_title">¡Actualización nueva!</string>
     <string name="update_dialog_desc">Hay una nueva actualización disponible, errores arreglados, nuevas cosas y demás</string>
     <string name="installit">Descargar e instalar</string>
+    <string name="skip_update">Omitir</string>
 
     <!--  COLORS -->
 
@@ -100,9 +101,9 @@
     <color name="colorPrimary">#F44336</color>
     <color name="colorPrimaryDark">#D32F2F</color>
     <color name="colorAccent">#FFEB3B</color>
-    <color name="grey">#878787</color>
+    <color name="grey">#A8A7A7</color>
 
-    <color name="greys">#B9B9B9</color>
+    <color name="greys">#DBDBDB</color>
     <color name="text_title">#323232</color>
     <color name="bg">#F6F7F8</color>
     <color name="text_desc">#878787</color>
