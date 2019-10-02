@@ -29,9 +29,9 @@ public class Updater {
         RequestQueue queue = Volley.newRequestQueue(mc);
 
         String pack = mc.getPackageName();
-        Log.e("MAIN", "ches: "+urlBase );
+    //    Log.e("MAIN", "ches: "+urlBase );
         urlBase = urlBase.replace("api", "");
-        Log.e("MAIN", "check: "+urlBase );
+     //   Log.e("MAIN", "check: "+urlBase );
        final String basen = urlBase;
 
         urlBase = urlBase + "updater/get_update?package=" + pack + "&ver="+mc.getPackageManager().getPackageInfo(pack, 0).versionName;
