@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.dagf.presentlogolib.WineHelper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -48,14 +49,17 @@ public class Updater {
                         if(object.getString("1").equals("update")){
 
 
-                        //    Log.e("MAIN", "onResponse: "+basen+object.getString("url") );
-                            updateDialog = new UpdateDialog(mc, basen+object.getString("url"));
+if(WineHelper.checkPermissionWrite(mc)) {
+    //    Log.e("MAIN", "onResponse: "+basen+object.getString("url") );
+    updateDialog = new UpdateDialog(mc, basen + object.getString("url"));
 
-                            updateDialog.setSkipListener(listener);
+    updateDialog.setSkipListener(listener);
 
-                            updateDialog.show();
+    updateDialog.show();
 
-                            ThereUpdate = true;
+    ThereUpdate = true;
+}else
+    WineHelper.requestPermissionWrite(mc);
                         }else
                             {
                             ThereUpdate = false;
