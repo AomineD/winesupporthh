@@ -249,16 +249,6 @@ public class PlayerService extends IntentService implements Player.EventListener
             }
 
             @Override
-            public void onViewportSizeChange(EventTime eventTime, int width, int height) {
-
-            }
-
-            @Override
-            public void onNetworkTypeChanged(EventTime eventTime, @Nullable NetworkInfo networkInfo) {
-
-            }
-
-            @Override
             public void onMetadata(EventTime eventTime, Metadata metadata) {
 
             }
