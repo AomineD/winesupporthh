@@ -1,6 +1,9 @@
 package com.dagf.presentlogolib.utils;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -8,6 +11,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MediafireParser {
     private MediafireResponse ls;
@@ -47,13 +54,19 @@ ls.Failed(error.getMessage());
     // ===================================== AHORA SI VIENE LO CHIDO ================================================ //
 
     private int limit = 120;
-    private int since = 9;
+    private int since = 27;
 
     private void HandleResultPage(String r){
 
-      //   Log.e("MAIN", "HandleResultPage: "+r);
+       //  Log.e("MAIN", "HandleResultPage: "+r);
 
         String[] variosone = r.split("href=\"");
+        for(int i=0; i < variosone.length; i++){
+            if(variosone[i].startsWith("\"http://download")){
+                since = i;
+            }
+        }
+      //  Log.e("MAIN", "HandleResultPage: "+since );
 String scr = "";
 
         for(int i=0; i < variosone.length; i++){
@@ -67,9 +80,9 @@ String scr = "";
             }
         }
 
-      //Log.e("MAIN", "HandleResultPage: "+scr);
+    //  Log.e("MAIN", "HandleResultPage: "+scr);
        // Log.e("MAIN", "HandleResultPage: "+r);
-      // generateNoteOnSD(mm, "test", r);
+     // generateNoteOnSD(mm, "test.txt", r);
 
 
         String[] variostwo = scr.split("\"input\"");
@@ -102,7 +115,7 @@ String scr = "";
             another = another.replace(" ", "");
         }
 
-      //  Log.e("MAIN", "HandleResultPage: ANOTHER = "+another);
+        //Log.e("MAIN", "HandleResultPage: ANOTHER = "+another);
 
         ls.Loaded(another);
 
@@ -115,6 +128,22 @@ String scr = "";
 
         void Failed(String errno);
     }
-    
+
+    public void generateNoteOnSD(Context context, String sFileName, String sBody) {
+        try {
+            File root = new File(Environment.getExternalStorageDirectory(), "Notes");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            File gpxfile = new File(root, sFileName);
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(sBody);
+            writer.flush();
+            writer.close();
+            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 }
